@@ -35,9 +35,9 @@ class _SelectChildrenListTitleState extends State<SelectChildrenListTitle> {
   void _select() {
     setState(() {
       _selected = !_selected;
-      if (!widget.theEmployee.children.contains(widget.theChild)) widget.theEmployee.children.addAll([...widget.theEmployee.children, widget.theChild]);
+      if (!widget.theEmployee.children.contains(widget.theChild) && _selected) widget.theEmployee.children.add(widget.theChild);
+      if (widget.theEmployee.children.contains(widget.theChild) && !_selected) widget.theEmployee.children.remove(widget.theChild);
       widget.theEmployee.save();
-      print(widget.theEmployee.position);
 //      _selected ? widget.childrenList.addChild(widget.theChild) : widget.childrenList.removeChild(widget.theChild);
     });
 //      if (widget.theEmployee == null) {
