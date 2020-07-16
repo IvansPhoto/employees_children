@@ -1,4 +1,6 @@
+import 'package:rxdart/rxdart.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 part 'classes.g.dart';
 
 abstract class RouteNames {
@@ -9,12 +11,34 @@ abstract class RouteNames {
   static final childrenList = '/ChildrenList';
   static final showChild = '/ShowChild';
   static final newChildren = '/NewChild/NewChild';
-  static final selectChildren = '/SelectChildren';
+  static final selectChildren = '/SelectChildren/SelectChildren';
 }
 
 abstract class Boxes {
   static final String employeesBox = 'employees';
   static final String childrenBox = 'children';
+}
+
+class StreamServes {
+
+//  Future<Box> _employeeBoxFuture = Future(computation)
+
+  final _employeeBox = Hive.box<EmployeesData>(Boxes.employeesBox);
+  set addEmployee(EmployeesData newEmployee) => _employeeBox.add(newEmployee);
+  EmployeesData getEmployee(int index) => _employeeBox.getAt(index);
+  Future<void> removeEmployee(EmployeesData removedEmployee) => removedEmployee.delete();
+  Future<void> updateEmployee(EmployeesData updatedEmployee) => updatedEmployee.save();
+
+  var _child = BehaviorSubject<ChildrenData>();
+  Stream get child$ => _child.stream;
+  ChildrenData get getChild => _child.value;
+  set setChild(ChildrenData newChild) => _child.value = newChild;
+
+
+  final _childrenList = BehaviorSubject<List<ChildrenData>>();
+  Stream get childrenList$ => _childrenList.stream;
+  List<ChildrenData> get currentChildrenList => _childrenList.value;
+  set setChildrenList(List<ChildrenData> newChildrenList) => _childrenList.add(newChildrenList);
 }
 
 class ChildrenSelectedList {

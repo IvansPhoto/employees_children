@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:employees_children/classes.dart';
 
 class SelectChildrenListTitle extends StatefulWidget {
   final ChildrenData theChild;
   final EmployeesData theEmployee;
-  final ChildrenSelectedList childrenList;
-
-  SelectChildrenListTitle({this.theChild, this.theEmployee, this.childrenList});
+  final Box<ChildrenData> childrenBox;
+  SelectChildrenListTitle({this.theChild, this.theEmployee, this.childrenBox});
 
   @override
   _SelectChildrenListTitleState createState() => _SelectChildrenListTitleState();
@@ -32,7 +33,6 @@ class _SelectChildrenListTitleState extends State<SelectChildrenListTitle> {
   }
 
   void _select() {
-    print(widget.childrenList ?? 'selectedChildren is null');
     setState(() {
       _selected = !_selected;
       if (!widget.theEmployee.children.contains(widget.theChild)) widget.theEmployee.children.addAll([...widget.theEmployee.children, widget.theChild]);
@@ -64,7 +64,7 @@ class _SelectChildrenListTitleState extends State<SelectChildrenListTitle> {
       title: Text('${widget.theChild.surName} ${widget.theChild.name} ${widget.theChild.patronymic}'),
       selected: _selected,
       onTap: () => _select(),
-      trailing: _selected ? Icon(Icons.check_circle) : Icon(Icons.radio_button_unchecked),
+      trailing: _selected ? Icon(Icons.navigate_next) : Icon(Icons.arrow_back),
     );
   }
 }

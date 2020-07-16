@@ -39,11 +39,13 @@ class DeleteConfirmation extends StatelessWidget {
                   if (child != null) child.delete();
                   Navigator.pop(context);
                   Navigator.pop(context);
-                  _scaffoldKey.currentState.showSnackBar(SnackBar(
-                    content: const Text('The record has been deleted.'),
-                    duration: Duration(seconds: 5),
-                    elevation: 0,
-                  ));
+                  _scaffoldKey.currentState
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(SnackBar(
+                      content: const Text('The record has been deleted.'),
+                      duration: Duration(seconds: 5),
+                      elevation: 0,
+                    ));
                 },
               )
             ],

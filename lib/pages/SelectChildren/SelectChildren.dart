@@ -5,36 +5,22 @@ import 'package:employees_children/pages/SelectChildren/SelectChildrenListTitle.
 import 'package:employees_children/classes.dart';
 
 class SelectChildren extends StatefulWidget {
-  final EmployeesData employee;
-
-  SelectChildren({this.employee});
 
   @override
   _SelectChildrenState createState() => _SelectChildrenState();
 }
 
 class _SelectChildrenState extends State<SelectChildren> {
-  final childrenSelectedList = ChildrenSelectedList();
   final childrenBox = Hive.box<ChildrenData>(Boxes.childrenBox);
 
   @override
-  void initState() {
-    childrenSelectedList.childrenList = [];
-    print(childrenSelectedList.childrenList ?? 'selectedChildren is null');
-    widget.employee.children = HiveList(childrenBox);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    EmployeesData employee = ModalRoute.of(context).settings.arguments;
+    print(employee.children ?? 'employee.children is null');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('Select children for ${widget.employee == null ? 'New employee' : widget.employee.name}'),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.check_circle), onPressed: () => Navigator.pop(context, childrenSelectedList.childrenList)),
-          IconButton(icon: Icon(Icons.backspace), onPressed: () => Navigator.pop(context))
-        ],
+        title: Text('Select children for ${employee == null ? 'New employee' : employee.name}'),
       ),
       body: ValueListenableBuilder(
         valueListenable: childrenBox.listenable(),
@@ -48,7 +34,7 @@ class _SelectChildrenState extends State<SelectChildren> {
                 ChildrenData child = childrenBox.getAt(index);
                 return Card(
                   elevation: 0,
-                  child: SelectChildrenListTitle(theChild: child, theEmployee: widget.employee, childrenList: childrenSelectedList),
+                  child: SelectChildrenListTitle(theChild: child, theEmployee: employee, childrenBox: childrenBox),
                 );
               },
             );

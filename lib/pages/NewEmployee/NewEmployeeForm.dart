@@ -20,7 +20,6 @@ class _EmployeeFormState extends State<EmployeeForm> {
   TextEditingController _surnameTEC;
   TextEditingController _positionTEC;
 
-//  TextEditingController _birthdayTEC;
   DateTime _birthday;
   String _birthdayText;
   HiveList<ChildrenData> _childrenList;
@@ -30,11 +29,11 @@ class _EmployeeFormState extends State<EmployeeForm> {
 
   @override
   void initState() {
+    print(widget.employee ?? "employee is Null");
     if (widget.employee == null) {
       _nameTEC = TextEditingController();
       _surnameTEC = TextEditingController();
       _positionTEC = TextEditingController();
-//      _birthdayTEC = TextEditingController(text: 'Not set');
       _birthday = DateTime.now();
       _birthdayText = '${DateTime.now().year.toString()}-${DateTime.now().month.toString()}-${DateTime.now().day.toString()}';
       _childrenList = HiveList(childrenBox);
@@ -42,7 +41,6 @@ class _EmployeeFormState extends State<EmployeeForm> {
       _nameTEC = TextEditingController(text: widget.employee.name);
       _surnameTEC = TextEditingController(text: widget.employee.surName);
       _positionTEC = TextEditingController(text: widget.employee.position);
-//      _birthdayTEC = TextEditingController(text: '${widget.employee.birthdate.year.toString()}-${widget.employee.birthdate.month.toString()}-${widget.employee.birthdate.day.toString()}');
       _birthday = widget.employee.birthdate;
       _birthdayText = '${widget.employee.birthdate.year.toString()}-${widget.employee.birthdate.month.toString()}-${widget.employee.birthdate.day.toString()}';
       _childrenList = widget.employee.children;
@@ -55,7 +53,6 @@ class _EmployeeFormState extends State<EmployeeForm> {
     _nameTEC.dispose();
     _surnameTEC.dispose();
     _positionTEC.dispose();
-//    _birthdayTEC.dispose();
     super.dispose();
   }
 
@@ -65,14 +62,16 @@ class _EmployeeFormState extends State<EmployeeForm> {
       surName: _surnameTEC.text,
       birthdate: _birthday,
       position: _positionTEC.text,
-//      children: _childrenList, //Check output from ChildrenList
+      children: HiveList(childrenBox), //Check output from ChildrenList
     ));
     Navigator.of(context).pop();
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text('The employee has been added.'),
-      elevation: 0,
-      duration: Duration(seconds: 5),
-    ));
+    Scaffold.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text('The employee has been added.'),
+        elevation: 0,
+        duration: Duration(seconds: 5),
+      ));
   }
 
   void _updateEmployee() {
@@ -80,38 +79,27 @@ class _EmployeeFormState extends State<EmployeeForm> {
     widget.employee.surName = _surnameTEC.text;
     widget.employee.position = _positionTEC.text;
     widget.employee.birthdate = _birthday;
-    widget.employee.children = _childrenList;
+//    widget.employee.children = HiveList(childrenBox);
     widget.employee.save();
     Navigator.of(context).pop();
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text('The employee has been updated.'),
-      elevation: 0,
-      duration: Duration(seconds: 5),
-    ));
+    Scaffold.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text('The employee has been updated.'),
+        elevation: 0,
+        duration: Duration(seconds: 5),
+      ));
   }
 
-  List<Widget> _showChildrenList(List<ChildrenData> _childrenList) {
-    List<Widget> _childrenWidgets = [];
-    _childrenWidgets.add(Text('Children:'));
-    if (_childrenList == null) {
-      _childrenWidgets.add(Text('Without children'));
-      return _childrenWidgets;
-    } else {
-      for (int i = 0; i < _childrenList.length; i++) {
-        _childrenWidgets.add(Text('${i + 1}: ${_childrenList[i].surName} ${_childrenList[i].name} ${_childrenList[i].patronymic}'));
-      }
-    }
-    return _childrenWidgets;
-  }
-
-  void _selectChildren(context) async {
-//    Navigator.pushNamed(context, RouteNames.selectChildren);
-    List<ChildrenData> children = await Navigator.push(context, MaterialPageRoute(builder: (context) => SelectChildren(employee: widget.employee)));
+  void _selectChildren(context) {
+    print(widget.employee.surName ?? "employee is Null");
+    Navigator.pushNamed(context, RouteNames.selectChildren, arguments: widget.employee);
+//    List<ChildrenData> children = await Navigator.push(context, MaterialPageRoute(builder: (context) => SelectChildren(employee: widget.employee)));
 //    if (children != null) setState(() => _childrenList.addAll(children));
 //    children.forEach((element) => print(element.name));
     Scaffold.of(context)
       ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('${children.length ?? 'None'} are selected.')));
+      ..showSnackBar(SnackBar(content: Text('${widget.employee.name ?? 'None'} are selected.')));
   }
 
   @override
@@ -162,7 +150,13 @@ class _EmployeeFormState extends State<EmployeeForm> {
                     })),
                 decoration: const InputDecoration(hintText: 'Birthday', labelText: "The birthday"),
               ),
-              FlatButton.icon(
+              RaisedButton(
+                elevation: 0,
+                onPressed: () => {if (widget._formKey.currentState.validate()) widget.employee == null ? _addEmployee() : _updateEmployee()},
+                child: widget.employee == null ? const Text('Submit') : const Text('Update'),
+              ),
+
+              RaisedButton.icon(
                 onPressed: () {
                   _selectChildren(context);
                 },
@@ -170,15 +164,8 @@ class _EmployeeFormState extends State<EmployeeForm> {
                 label: Text('Add a child'),
               ),
 
-              ..._showChildrenList(_childrenList),
-
               _EmployeeChildrenList(childrenList: _childrenList, employeesBox: employeesBox,),
 
-              RaisedButton(
-                elevation: 0,
-                onPressed: () => {if (widget._formKey.currentState.validate()) widget.employee == null ? _addEmployee() : _updateEmployee()},
-                child: widget.employee == null ? const Text('Submit') : const Text('Update'),
-              ),
             ],
           )),
     );
