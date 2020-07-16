@@ -6,8 +6,8 @@ import 'package:employees_children/classes.dart';
 class SelectChildrenListTitle extends StatefulWidget {
   final ChildrenData theChild;
   final EmployeesData theEmployee;
-  final Box<ChildrenData> childrenBox;
-  SelectChildrenListTitle({this.theChild, this.theEmployee, this.childrenBox});
+
+  SelectChildrenListTitle({this.theChild, this.theEmployee});
 
   @override
   _SelectChildrenListTitleState createState() => _SelectChildrenListTitleState();
@@ -18,16 +18,9 @@ class _SelectChildrenListTitleState extends State<SelectChildrenListTitle> {
 
   @override
   void initState() {
-    if (widget.theEmployee == null || widget.theEmployee.children == null)
-      _selected = false;
-    else
-      widget.theEmployee.children.forEach((employeeChild) {
-        if (identical(employeeChild, widget.theChild)) {
-          _selected = true;
-        } else {
-          _selected = false;
-        }
-      });
+    widget.theEmployee.children.forEach((employeeChild) {
+      if (identical(employeeChild, widget.theChild)) _selected = true;
+    });
 
     super.initState();
   }
@@ -60,11 +53,12 @@ class _SelectChildrenListTitleState extends State<SelectChildrenListTitle> {
 
   @override
   Widget build(BuildContext context) {
+    print('_selected is $_selected');
     return ListTile(
       title: Text('${widget.theChild.surName} ${widget.theChild.name} ${widget.theChild.patronymic}'),
       selected: _selected,
       onTap: () => _select(),
-      trailing: _selected ? Icon(Icons.navigate_next) : Icon(Icons.arrow_back),
+      trailing: _selected ? Icon(Icons.check_circle) : Icon(Icons.radio_button_unchecked),
     );
   }
 }

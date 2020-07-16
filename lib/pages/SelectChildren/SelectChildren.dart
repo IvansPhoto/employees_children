@@ -16,7 +16,6 @@ class _SelectChildrenState extends State<SelectChildren> {
   @override
   Widget build(BuildContext context) {
     EmployeesData employee = ModalRoute.of(context).settings.arguments;
-    print(employee.children ?? 'employee.children is null');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -34,7 +33,7 @@ class _SelectChildrenState extends State<SelectChildren> {
                 ChildrenData child = childrenBox.getAt(index);
                 return Card(
                   elevation: 0,
-                  child: SelectChildrenListTitle(theChild: child, theEmployee: employee, childrenBox: childrenBox),
+                  child: SelectChildrenListTitle(theChild: child, theEmployee: employee),
                 );
               },
             );
