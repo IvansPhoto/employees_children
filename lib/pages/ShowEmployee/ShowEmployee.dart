@@ -9,7 +9,7 @@ class ShowEmployee extends StatelessWidget {
   List<Widget> _showChildrenList(List<ChildrenData> _childrenList) {
     List<Widget> _childrenWidgets = [];
     _childrenWidgets.add(Text('Children:'));
-    if (_childrenList == null) {
+    if (_childrenList == null || _childrenList.length == 0) {
       _childrenWidgets.add(Text('Without children'));
       return _childrenWidgets;
     } else {

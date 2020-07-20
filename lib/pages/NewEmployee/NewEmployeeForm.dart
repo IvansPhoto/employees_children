@@ -153,19 +153,19 @@ class _EmployeeFormState extends State<EmployeeForm> {
               RaisedButton(
                 elevation: 0,
                 onPressed: () => {if (widget._formKey.currentState.validate()) widget.employee == null ? _addEmployee() : _updateEmployee()},
-                child: widget.employee == null ? const Text('Submit') : const Text('Update'),
+                child: widget.employee == null ? const Text('Save the employee') : const Text('Update the employee'),
               ),
 
-              RaisedButton.icon(
-                onPressed: () {
-                  _selectChildren(context);
-                },
-                icon: Icon(Icons.person_add),
-                label: Text('Add a child'),
-              ),
+              if (widget.employee != null)
+                RaisedButton.icon(
+                  onPressed: () {
+                    _selectChildren(context);
+                  },
+                  icon: Icon(Icons.person_add),
+                  label: Text('Add a child'),
+                ),
 
-              _EmployeeChildrenList(childrenList: _childrenList, employeesBox: employeesBox,),
-
+              _EmployeeChildrenList(childrenList: _childrenList, employee: widget.employee),
             ],
           )),
     );
@@ -174,28 +174,32 @@ class _EmployeeFormState extends State<EmployeeForm> {
 
 class _EmployeeChildrenList extends StatelessWidget {
   final HiveList<ChildrenData> childrenList;
-  final Box<EmployeesData> employeesBox;
-  _EmployeeChildrenList({this.childrenList, this.employeesBox});
+  final EmployeesData employee;
+
+  _EmployeeChildrenList({this.childrenList, this.employee});
+
+  final Box<EmployeesData> employeesBox = Hive.box<EmployeesData>(Boxes.employeesBox);
 
   List<InlineSpan> _childrenListTextSpan(List<ChildrenData> _childrenList) {
-    List<InlineSpan>  _childrenWidgets = [];
-      for (int i = 0; i < _childrenList.length; i++) {
-        _childrenWidgets.add(TextSpan(text:'${i + 1}: ${_childrenList[i].surName} ${_childrenList[i].name} ${_childrenList[i].patronymic} \n'));
-      }
+    List<InlineSpan> _childrenWidgets = [];
+    for (int i = 0; i < _childrenList.length; i++) {
+      _childrenWidgets.add(TextSpan(text: '${i + 1}: ${_childrenList[i].surName} ${_childrenList[i].name} ${_childrenList[i].patronymic} \n'));
+    }
     return _childrenWidgets;
   }
 
   @override
   Widget build(BuildContext context) {
+    if (employee == null) return Text('Children can be added after saving the employee');
     return ValueListenableBuilder(
       valueListenable: employeesBox.listenable(),
       builder: (context, employeesBox, _) {
-        if (childrenList == null)
+        if (childrenList == null || childrenList.length == 0)
           return Text('Without children');
         else
           return RichText(
             text: TextSpan(
-              text: 'Children\n',
+              text: 'Children:\n',
               children: [..._childrenListTextSpan(childrenList)],
             ),
           );
