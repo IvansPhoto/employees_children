@@ -79,7 +79,7 @@ class _NewChildFormState extends State<NewChildForm> {
   Widget build(BuildContext context) {
     return Form(
 		    key: widget._formKey,
-//		    autovalidate: true,
+		    autovalidate: true,
 		    child: Column(
 			    children: <Widget>[
 				    TextFormField(
@@ -106,6 +106,23 @@ class _NewChildFormState extends State<NewChildForm> {
 					    keyboardType: TextInputType.text,
 					    validator: (value) => value.isEmpty ? 'Enter the child patronymic' : null,
 				    ),
+
+				    TextField(
+					    readOnly: true,
+					    controller: TextEditingController(text: _birthdayText),
+					    onTap: () => showDatePicker(
+						    context: context,
+						    initialDate: widget.child == null ? DateTime.now() : widget.child.birthdate,
+						    firstDate: DateTime(1960),
+						    lastDate: DateTime(2021),
+					    ).then((dateTime) => setState(() {
+						    _birthday = dateTime;
+						    _birthdayText = '${dateTime.year.toString()}-${dateTime.month.toString()}-${dateTime.day.toString()}';
+					    })),
+					    decoration: const InputDecoration(hintText: 'Birthday', labelText: "The birthday"),
+				    ),
+
+
 				    Row(
 					    crossAxisAlignment: CrossAxisAlignment.center,
 					    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
