@@ -122,27 +122,6 @@ class _NewChildFormState extends State<NewChildForm> {
 					    decoration: const InputDecoration(hintText: 'Birthday', labelText: "The birthday"),
 				    ),
 
-
-				    Row(
-					    crossAxisAlignment: CrossAxisAlignment.center,
-					    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-					    children: <Widget>[
-						    RaisedButton(
-							    elevation: 0,
-							    child: widget.child == null ? const Text('Select birthday') : const Text('Update birthday'),
-							    onPressed: () => showDatePicker(
-								    context: context,
-								    initialDate: widget.child == null ? DateTime.now() : widget.child.birthdate,
-								    firstDate: DateTime(1950),
-								    lastDate: DateTime(2021),
-							    ).then((dateTime) => setState(() {
-								    _birthday = dateTime;
-								    _birthdayText = '${dateTime.year.toString()}-${dateTime.month.toString()}-${dateTime.day.toString()}';
-							    })),
-						    ),
-						    Text(_birthdayText)
-					    ],
-				    ),
 				    RaisedButton(
 					    elevation: 0,
 					    onPressed: () => {if (widget._formKey.currentState.validate()) widget.child == null ? _addChild() : _updateChild()},
