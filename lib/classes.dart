@@ -1,6 +1,7 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
 part 'classes.g.dart';
 
 abstract class RouteNames {
@@ -19,42 +20,75 @@ abstract class Boxes {
   static final String childrenBox = 'children';
 }
 
+String monthFromNumber(DateTime dateTime) {
+  String month;
+  switch (dateTime.month) {
+    case 1:
+      month = 'January';
+      break;
+    case 2:
+      month = 'February';
+      break;
+    case 3:
+      month = 'March';
+      break;
+    case 4:
+      month = 'April';
+      break;
+    case 5:
+      month = 'May';
+      break;
+    case 6:
+      month = 'June';
+      break;
+    case 7:
+      month = 'July';
+      break;
+    case 8:
+      month = 'August';
+      break;
+    case 9:
+      month = 'September';
+      break;
+    case 10:
+      month = 'October';
+      break;
+    case 11:
+      month = 'November';
+      break;
+    case 12:
+      month = 'December';
+      break;
+  }
+  return '${dateTime.day} $month ${dateTime.year}';
+}
+
 class StreamServes {
-
-//  Future<Box> _employeeBoxFuture = Future(computation)
-
   final _employeeBox = Hive.box<EmployeesData>(Boxes.employeesBox);
+
   set addEmployee(EmployeesData newEmployee) => _employeeBox.add(newEmployee);
+
   EmployeesData getEmployee(int index) => _employeeBox.getAt(index);
+
   Future<void> removeEmployee(EmployeesData removedEmployee) => removedEmployee.delete();
+
   Future<void> updateEmployee(EmployeesData updatedEmployee) => updatedEmployee.save();
 
   var _child = BehaviorSubject<ChildrenData>();
+
   Stream get child$ => _child.stream;
+
   ChildrenData get getChild => _child.value;
+
   set setChild(ChildrenData newChild) => _child.value = newChild;
 
-
   final _childrenList = BehaviorSubject<List<ChildrenData>>();
+
   Stream get childrenList$ => _childrenList.stream;
+
   List<ChildrenData> get currentChildrenList => _childrenList.value;
+
   set setChildrenList(List<ChildrenData> newChildrenList) => _childrenList.add(newChildrenList);
-}
-
-class ChildrenSelectedList {
-  List<ChildrenData> childrenList = [];
-
-  set addChild(ChildrenData child) {
-    if (!childrenList.contains(child)) childrenList.add(child);
-    childrenList.forEach((theChild) => print(theChild.name));
-//    notifyListeners();
-  }
-
-  set removeChild(ChildrenData child) {
-    if (childrenList.contains(child)) childrenList.remove(child);
-    childrenList.forEach((theChild) => print(theChild.name));
-//    notifyListeners();
-  }
 }
 
 @HiveType(typeId: 0)

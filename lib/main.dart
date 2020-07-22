@@ -41,14 +41,14 @@ void main() async {
         primaryColor: Colors.red[900],
         primaryColorDark: Colors.red[700],
         primaryColorLight: Colors.red[500],
-        buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.normal, height: 15, buttonColor: Colors.red[900]),
+        buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.normal, height: 15, buttonColor: Colors.red[900], ),
         textTheme: TextTheme(
-          bodyText1: TextStyle(fontSize: 25, color: Colors.red[900]),
-          bodyText2: TextStyle(fontSize: 25, color: Colors.deepOrange),
+          bodyText1: TextStyle(fontSize: 25, color: Colors.red),
+          bodyText2: TextStyle(fontSize: 25),
           caption: TextStyle(fontSize: 10, color: Colors.amber),
-          overline: TextStyle(fontSize: 25, color: Colors.blue),
-          button: TextStyle(fontSize: 25),
-          headline1: TextStyle(fontSize: 25),
+          button: TextStyle(fontSize: 30, color: Colors.blue),
+          subtitle1: TextStyle(fontSize: 25, color: Colors.red),
+          headline3: TextStyle(fontSize: 35, decoration: TextDecoration.overline)
         )),
   ));
 }

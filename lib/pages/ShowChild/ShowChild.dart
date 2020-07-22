@@ -19,11 +19,20 @@ class ShowChild extends StatelessWidget {
           return ListView(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             children: <Widget>[
-              Text('Name: ${child.name ?? 'Not specified'}'),
-              Text('Surname: ${child.surName ?? 'Not specified'}'),
-              Text('Patronymic: ${child.patronymic ?? 'Not specified'}'),
-              Text('Birthday: ${child.birthdate == null ? 'Not specified' : '${child.birthdate.year}-${child.birthdate.month}-${child.birthdate.day}'}'),
-            ActionButtonsChild(child: child,)
+              Text('Name:'),
+              Text('${child.name ?? 'Not specified'}', style: Theme.of(context).textTheme.bodyText1),
+              Divider(),
+              Text('Surname:'),
+              Text('${child.surName ?? 'Not specified'}', style: Theme.of(context).textTheme.bodyText1),
+              Divider(),
+              Text('Patronymic:'),
+              Text('${child.patronymic ?? 'Not specified'}', style: Theme.of(context).textTheme.bodyText1),
+              Divider(),
+              Text('Birthday:'),
+              Text('${child.birthdate == null ? 'Not specified' : monthFromNumber(child.birthdate)}', style: Theme.of(context).textTheme.bodyText1),
+              ActionButtonsChild(
+                child: child,
+              )
             ],
           );
         },

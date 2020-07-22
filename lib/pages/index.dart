@@ -15,8 +15,16 @@ class Index extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            FlatButton(onPressed: () => Navigator.pushNamed(context, RouteNames.employeesList), child: const Text('Employees List')),
-            FlatButton(onPressed: () => Navigator.pushNamed(context, RouteNames.childrenList), child: const Text('Children List')),
+            FlatButton(
+              onPressed: () => Navigator.pushNamed(context, RouteNames.employeesList),
+              child: const Text('Employees List'),
+              color: Colors.red[900],
+            ),
+            FlatButton(
+              onPressed: () => Navigator.pushNamed(context, RouteNames.childrenList),
+              child: const Text('Children List'),
+              color: Colors.red[900],
+            ),
           ],
         ),
       ),

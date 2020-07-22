@@ -5,8 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class ShowEmployee extends StatelessWidget {
-
-  List<Widget> _showChildrenList(List<ChildrenData> _childrenList) {
+  List<Widget> _showChildrenList(BuildContext context, List<ChildrenData> _childrenList) {
     List<Widget> _childrenWidgets = [];
     _childrenWidgets.add(Text('Children:'));
     if (_childrenList == null || _childrenList.length == 0) {
@@ -14,7 +13,7 @@ class ShowEmployee extends StatelessWidget {
       return _childrenWidgets;
     } else {
       for (int i = 0; i < _childrenList.length; i++) {
-        _childrenWidgets.add(Text('${i + 1}:  ${_childrenList[i].surName} ${_childrenList[i].name} ${_childrenList[i].patronymic}'));
+        _childrenWidgets.add(Text('${i + 1}:  ${_childrenList[i].surName} ${_childrenList[i].name} ${_childrenList[i].patronymic}', style: Theme.of(context).textTheme.bodyText1));
       }
     }
     return _childrenWidgets;
@@ -38,38 +37,41 @@ class ShowEmployee extends StatelessWidget {
                     text: TextSpan(
                   style: DefaultTextStyle.of(context).style,
                   children: <TextSpan>[
-                    const TextSpan(text: '\nName\n'),
-                    TextSpan(text: employee.name ?? 'Not specified'),
-                  ],
-                )),
-                RichText(
-                    text: TextSpan(
-                  style: DefaultTextStyle.of(context).style,
-                  children: <TextSpan>[
-                    const TextSpan(text: '\nSurname\n'),
-                    TextSpan(text: employee.surName ?? 'Not specified'),
-                  ],
-                )),
-                RichText(
-                    text: TextSpan(
-                  style: DefaultTextStyle.of(context).style,
-                  children: <TextSpan>[
-                    const TextSpan(text: '\nBirthday\n'),
-                    TextSpan(
-                      text: employee.birthdate == null ? 'Not specified' : '${employee.birthdate.year}-${employee.birthdate.month}-${employee.birthdate.day}',
-                    ),
-                  ],
-                )),
-                RichText(
-                    text: TextSpan(
-                  style: DefaultTextStyle.of(context).style,
-                  children: <TextSpan>[
-                    const TextSpan(text: '\nPosition\n'),
-                    TextSpan(text: employee.position ?? 'Not specified'),
+                    const TextSpan(text: 'Name:\n'),
+                    TextSpan(text: employee.name ?? 'Not specified', style: Theme.of(context).textTheme.bodyText1),
                   ],
                 )),
                 Divider(),
-                ..._showChildrenList(employee.children),
+                RichText(
+                    text: TextSpan(
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    const TextSpan(text: 'Surname:\n'),
+                    TextSpan(text: employee.surName ?? 'Not specified', style: Theme.of(context).textTheme.bodyText1),
+                  ],
+                )),
+                Divider(),
+                RichText(
+                    text: TextSpan(
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    const TextSpan(text: 'Birthday:\n'),
+                    TextSpan(
+                      text: employee.birthdate == null ? 'Not specified' : monthFromNumber(employee.birthdate), style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                )),
+                Divider(),
+                RichText(
+                    text: TextSpan(
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    const TextSpan(text: 'Position:\n'),
+                    TextSpan(text: employee.position ?? 'Not specified', style: Theme.of(context).textTheme.bodyText1),
+                  ],
+                )),
+                Divider(),
+                ..._showChildrenList(context, employee.children),
                 Divider(),
                 ActionButtons(employee: employee),
               ],
