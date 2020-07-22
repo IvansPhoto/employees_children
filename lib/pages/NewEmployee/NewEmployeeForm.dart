@@ -35,14 +35,14 @@ class _EmployeeFormState extends State<EmployeeForm> {
       _surnameTEC = TextEditingController();
       _positionTEC = TextEditingController();
       _birthday = DateTime.now();
-      _birthdayText = '${DateTime.now().year.toString()}-${DateTime.now().month.toString()}-${DateTime.now().day.toString()}';
+      _birthdayText = monthFromNumber(DateTime.now());
       _childrenList = HiveList(childrenBox);
     } else {
       _nameTEC = TextEditingController(text: widget.employee.name);
       _surnameTEC = TextEditingController(text: widget.employee.surName);
       _positionTEC = TextEditingController(text: widget.employee.position);
       _birthday = widget.employee.birthdate;
-      _birthdayText = '${widget.employee.birthdate.year.toString()}-${widget.employee.birthdate.month.toString()}-${widget.employee.birthdate.day.toString()}';
+      _birthdayText = monthFromNumber(widget.employee.birthdate);
       _childrenList = widget.employee.children;
     }
     super.initState();
@@ -146,7 +146,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
                   lastDate: DateTime(2021),
                 ).then((dateTime) => setState(() {
                       _birthday = dateTime;
-                      _birthdayText = '${dateTime.year.toString()}-${dateTime.month.toString()}-${dateTime.day.toString()}';
+                      _birthdayText = monthFromNumber(dateTime);
                     })),
                 decoration: const InputDecoration(hintText: 'Birthday', labelText: "The birthday"),
               ),
