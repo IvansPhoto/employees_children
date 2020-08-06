@@ -5,7 +5,6 @@ import 'package:employees_children/pages/SelectChildren/SelectChildrenListTitle.
 import 'package:employees_children/classes.dart';
 
 class SelectChildren extends StatefulWidget {
-
   @override
   _SelectChildrenState createState() => _SelectChildrenState();
 }
@@ -24,6 +23,11 @@ class _SelectChildrenState extends State<SelectChildren> {
       body: ValueListenableBuilder(
         valueListenable: childrenBox.listenable(),
         builder: (context, Box<ChildrenData> childrenBox, _) {
+
+          List<SelectedChildren> list = makeChildrenList(allChildren: childrenBox.values.toList(), employeeChildren: employee.children);
+          print(list.length);
+          list.forEach((element) => print('${element.selected} ${element.child.name}'));
+
           if (childrenBox.values.length == 0)
             return Center(child: const Text('No children in the list'));
           else
@@ -31,6 +35,7 @@ class _SelectChildrenState extends State<SelectChildren> {
               itemCount: childrenBox.values.length,
               itemBuilder: (context, index) {
                 ChildrenData child = childrenBox.getAt(index);
+
                 return Card(
                   elevation: 0,
                   child: SelectChildrenListTitle(theChild: child, theEmployee: employee),

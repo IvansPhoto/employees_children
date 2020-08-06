@@ -3,6 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class Index extends StatelessWidget {
+  void _generatorTest(int x) {
+    _generator(x).forEach((element) {
+      print(element);
+    });
+  }
+
+  Stream<int> _generator(int x) async* {
+    int a = x;
+    if (x > 5) yield a += 1;
+    yield a += 2;
+    yield a += 3;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +41,7 @@ class Index extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: IconButton(icon: Icon(Icons.add_circle), onPressed: () => _generatorTest(3)),
     );
   }
 }

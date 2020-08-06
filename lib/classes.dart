@@ -1,3 +1,4 @@
+import 'package:employees_children/pages/SelectChildren/SelectChildren.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -89,6 +90,28 @@ class StreamServes {
   List<ChildrenData> get currentChildrenList => _childrenList.value;
 
   set setChildrenList(List<ChildrenData> newChildrenList) => _childrenList.add(newChildrenList);
+
+  List<Map<ChildrenData, bool>> theChild;
+}
+
+class SelectedChildren {
+  ChildrenData child;
+  bool selected;
+
+  SelectedChildren({this.child, this.selected});
+}
+
+List<SelectedChildren> makeChildrenList({List<ChildrenData> employeeChildren, List<ChildrenData> allChildren}) {
+  List<SelectedChildren> finalList = [];
+
+  allChildren.forEach((allChild) {
+    finalList.add(SelectedChildren(
+      child: allChild,
+      selected: employeeChildren.contains(allChild),
+    ));
+  });
+
+  return finalList;
 }
 
 @HiveType(typeId: 0)
