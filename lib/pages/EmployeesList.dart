@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:employees_children/classes.dart';
+import 'package:employees_children/GlobalStore.dart';
 
 class EmployeesList extends StatelessWidget {
+  final store = gStore.get<GlobalStore>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +27,10 @@ class EmployeesList extends StatelessWidget {
                 child: ListTile(
                   title: Text('${theEmployee.surName} ${theEmployee.name}'),
                   subtitle: Text(theEmployee.children == null ? 'No children' : 'Children: ${theEmployee.children.length}'),
-                  onTap: () => Navigator.of(context).pushNamed(RouteNames.showEmployee, arguments: theEmployee),
+                  onTap: () {
+                    store.theEmployee = theEmployee;
+                    Navigator.of(context).pushNamed(RouteNames.showEmployee);
+                  },
                 ),
               );
             },
@@ -33,7 +39,7 @@ class EmployeesList extends StatelessWidget {
       ),
       floatingActionButton: IconButton(
         icon: const Icon(Icons.add_circle),
-        onPressed: () => Navigator.pushNamed(context, RouteNames.newEmployee),
+        onPressed: () => Navigator.pushNamed(context, RouteNames.newEmployee, arguments: true),
       ),
     );
   }

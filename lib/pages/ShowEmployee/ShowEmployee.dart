@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:employees_children/Support.dart';
+import 'package:employees_children/GlobalStore.dart';
 
 class ShowEmployee extends StatelessWidget {
+  final store = gStore.get<GlobalStore>();
+
   List<Widget> _showChildrenList(BuildContext context, List<ChildrenData> _childrenList) {
     List<Widget> _childrenWidgets = [];
     _childrenWidgets.add(Text('Children:'));
@@ -22,7 +25,7 @@ class ShowEmployee extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EmployeesData employee = ModalRoute.of(context).settings.arguments;
+    final EmployeesData employee = store.theEmployee;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -34,6 +37,7 @@ class ShowEmployee extends StatelessWidget {
             return ListView(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               children: <Widget>[
+                //Name
                 RichText(
                     text: TextSpan(
                   style: DefaultTextStyle.of(context).style,
@@ -43,6 +47,7 @@ class ShowEmployee extends StatelessWidget {
                   ],
                 )),
                 Divider(),
+                //Surname
                 RichText(
                     text: TextSpan(
                   style: DefaultTextStyle.of(context).style,
@@ -52,17 +57,20 @@ class ShowEmployee extends StatelessWidget {
                   ],
                 )),
                 Divider(),
+                //Birthday
                 RichText(
                     text: TextSpan(
                   style: DefaultTextStyle.of(context).style,
                   children: <TextSpan>[
                     const TextSpan(text: 'Birthday:\n'),
                     TextSpan(
-                      text: employee.birthdate == null ? 'Not specified' : monthFromNumber(employee.birthdate), style: Theme.of(context).textTheme.bodyText1,
+                      text: employee.birthdate == null ? 'Not specified' : monthFromNumber(employee.birthdate),
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ],
                 )),
                 Divider(),
+                //Position
                 RichText(
                     text: TextSpan(
                   style: DefaultTextStyle.of(context).style,
@@ -72,8 +80,10 @@ class ShowEmployee extends StatelessWidget {
                   ],
                 )),
                 Divider(),
+                //List of children
                 ..._showChildrenList(context, employee.children),
                 Divider(),
+                //Buttons for edit and delete the employee
                 ActionButtons(employee: employee),
               ],
             );

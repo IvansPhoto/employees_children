@@ -16,6 +16,7 @@ void updateChildren({EmployeesData employee, List<SelectedChildren> selectedChil
   selectedChildren.forEach((selectedChild) {
    if (selectedChild.selected) employee.children.add(selectedChild.child);
   });
+  employee.save();
 }
 
 String monthFromNumber(DateTime dateTime) {

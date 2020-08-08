@@ -4,12 +4,15 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:employees_children/classes.dart';
 import 'package:employees_children/Support.dart';
+import 'package:employees_children/GlobalStore.dart';
 
 class EmployeeForm extends StatefulWidget {
-  final _formKey = GlobalKey<FormState>();
   final EmployeesData employee;
+  final bool isNew; //Change form to add a new employee
+  EmployeeForm({this.employee, this.isNew});
 
-  EmployeeForm({this.employee});
+  final _formKey = GlobalKey<FormState>();
+  final store = gStore.get<GlobalStore>();
 
   @override
   _EmployeeFormState createState() => _EmployeeFormState();
@@ -29,8 +32,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
 
   @override
   void initState() {
-    print(widget.employee ?? "employee is Null");
-    if (widget.employee == null) {
+    if (widget.isNew == true) {
       _nameTEC = TextEditingController();
       _surnameTEC = TextEditingController();
       _positionTEC = TextEditingController();
@@ -91,13 +93,12 @@ class _EmployeeFormState extends State<EmployeeForm> {
       ));
   }
 
-  void _selectChildren(context) {
-    print(widget.employee.surName ?? "employee is Null");
-    Navigator.pushNamed(context, RouteNames.selectChildren);
+  void _selectChildren(context) async {
+    final isUpdated = await Navigator.pushNamed(context, RouteNames.selectChildren);
     Scaffold.of(context)
       ..removeCurrentSnackBar()
       ..showSnackBar(SnackBar(
-        content: Text('${widget.employee.name ?? 'None'} has been updated!'),
+        content: isUpdated == true ? Text('${widget.employee.name} has been updated!') : Text('Children of ${widget.employee.name} did not changed'),
         elevation: 0,
         duration: Duration(seconds: 5),
       ));

@@ -22,12 +22,9 @@ class _SelectChildrenState extends State<SelectChildren> {
     super.initState();
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
         title: Text('Select children for ${store.theEmployee.name ??= 'New employee'}'),
@@ -71,20 +68,12 @@ class _SelectChildrenState extends State<SelectChildren> {
           FlatButton(
               onPressed: () {
                 updateChildren(employee: store.theEmployee, selectedChildren: selectedChildren);
-                print('Update');
-                Navigator.of(context).pop();
+                Navigator.pop(context, true);
               },
               child: Text('Update')),
           FlatButton(
               onPressed: () {
-                Navigator.of(context).pop();
-                _scaffoldKey.currentState
-                  ..removeCurrentSnackBar()
-                  ..showSnackBar(SnackBar(
-                    content: Text('${store.theEmployee.name ?? 'None'} has been updated!'),
-                    elevation: 0,
-                    duration: Duration(seconds: 5),
-                  ));
+                Navigator.pop(context, false);
               },
               child: Text('Cancel')),
         ],
