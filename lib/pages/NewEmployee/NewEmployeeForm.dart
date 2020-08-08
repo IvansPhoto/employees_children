@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:employees_children/classes.dart';
-import 'package:employees_children/pages/SelectChildren/SelectChildren.dart';
+import 'package:employees_children/Support.dart';
 
 class EmployeeForm extends StatefulWidget {
   final _formKey = GlobalKey<FormState>();
@@ -93,13 +93,14 @@ class _EmployeeFormState extends State<EmployeeForm> {
 
   void _selectChildren(context) {
     print(widget.employee.surName ?? "employee is Null");
-    Navigator.pushNamed(context, RouteNames.selectChildren, arguments: widget.employee);
-//    List<ChildrenData> children = await Navigator.push(context, MaterialPageRoute(builder: (context) => SelectChildren(employee: widget.employee)));
-//    if (children != null) setState(() => _childrenList.addAll(children));
-//    children.forEach((element) => print(element.name));
+    Navigator.pushNamed(context, RouteNames.selectChildren);
     Scaffold.of(context)
       ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('${widget.employee.name ?? 'None'} are selected.')));
+      ..showSnackBar(SnackBar(
+        content: Text('${widget.employee.name ?? 'None'} has been updated!'),
+        elevation: 0,
+        duration: Duration(seconds: 5),
+      ));
   }
 
   @override
@@ -158,9 +159,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
 
               if (widget.employee != null)
                 RaisedButton.icon(
-                  onPressed: () {
-                    _selectChildren(context);
-                  },
+                  onPressed: () => _selectChildren(context),
                   icon: Icon(Icons.person_add),
                   label: Text('Add a child'),
                 ),

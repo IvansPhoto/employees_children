@@ -1,7 +1,9 @@
+import 'package:employees_children/GlobalStore.dart';
 import 'package:employees_children/pages/SelectChildren/SelectChildren.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:employees_children/classes.dart';
 import 'package:employees_children/pages/ChildrenList.dart';
 import 'package:employees_children/pages/EmployeesList.dart';
@@ -17,6 +19,9 @@ void main() async {
   Hive.registerAdapter<ChildrenData>(ChildrenDataAdapter());
   await Hive.openBox<EmployeesData>(Boxes.employeesBox);
   await Hive.openBox<ChildrenData>(Boxes.childrenBox);
+
+  gStore.registerLazySingleton<GlobalStore>(() => GlobalStore());
+  
   runApp(MaterialApp(
     title: 'The EFT test application',
     initialRoute: RouteNames.index,

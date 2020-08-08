@@ -53,7 +53,6 @@ class _SelectChildrenListTitleState extends State<SelectChildrenListTitle> {
 
   @override
   Widget build(BuildContext context) {
-    print('_selected is $_selected');
     return ListTile(
       title: Text('${widget.theChild.surName} ${widget.theChild.name} ${widget.theChild.patronymic}'),
       selected: _selected,
