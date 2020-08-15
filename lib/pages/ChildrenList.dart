@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:employees_children/classes.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:employees_children/Support.dart';
 
 class ChildrenList extends StatelessWidget {
   @override
@@ -10,6 +11,7 @@ class ChildrenList extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         title: const Text('The list of children'),
+        actions: [_ButtonAddChildren()],
       ),
       body: ValueListenableBuilder(
         valueListenable: Hive.box<ChildrenData>(Boxes.childrenBox).listenable(),
@@ -40,5 +42,19 @@ class ChildrenList extends StatelessWidget {
         onPressed: () => Navigator.pushNamed(context, RouteNames.newChildren),
       ),
     );
+  }
+}
+
+class _ButtonAddChildren extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.get_app),
+        onPressed: () {
+          GeneratePersons.generateChildren();
+          Scaffold.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text('A child has been added.')));
+        });
   }
 }

@@ -76,13 +76,13 @@ class _EmployeeFormState extends State<EmployeeForm> {
       ));
   }
 
-  void _updateEmployee() {
+  void _updateEmployee() async {
     widget.employee.name = _nameTEC.text;
     widget.employee.surName = _surnameTEC.text;
     widget.employee.position = _positionTEC.text;
     widget.employee.birthdate = _birthday;
 //    widget.employee.children = HiveList(childrenBox);
-    widget.employee.save();
+    await widget.employee.save();
     Navigator.of(context).pop();
     Scaffold.of(context)
       ..removeCurrentSnackBar()

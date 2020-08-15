@@ -34,9 +34,9 @@ class DeleteConfirmation extends StatelessWidget {
               FlatButton.icon(
                 icon: Icon(Icons.delete_forever),
                 label: const Text('Remove from the list!'),
-                onPressed: () {
-                  if (employee != null) employee.delete();
-                  if (child != null) child.delete();
+                onPressed: () async {
+                  if (employee != null) await employee.delete();
+                  if (child != null) await child.delete();
                   Navigator.pop(context);
                   Navigator.pop(context);
                   _scaffoldKey.currentState

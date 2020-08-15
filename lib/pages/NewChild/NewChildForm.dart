@@ -63,12 +63,12 @@ class _NewChildFormState extends State<NewChildForm> {
     ));
   }
 
-  void _updateChild() {
+  void _updateChild() async {
     widget.child.name = _nameTEC.text;
     widget.child.surName = _surnameTEC.text;
     widget.child.patronymic = _patronymicTEC.text;
     widget.child.birthdate = _birthday;
-    widget.child.save();
+    await widget.child.save();
     Navigator.of(context).pop();
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text('The employee has been updated.'),

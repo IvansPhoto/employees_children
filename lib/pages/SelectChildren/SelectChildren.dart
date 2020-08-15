@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:employees_children/pages/SelectChildren/SelectChildrenListTitle.dart';
 import 'package:employees_children/classes.dart';
 import 'package:employees_children/GlobalStore.dart';
 import 'package:employees_children/Support.dart';
@@ -15,6 +14,25 @@ class _SelectChildrenState extends State<SelectChildren> {
   final childrenBox = Hive.box<ChildrenData>(Boxes.childrenBox);
   final store = gStore.get<GlobalStore>();
   List<SelectedChildren> selectedChildren;
+
+  List<SelectedChildren> makeChildrenList({List<ChildrenData> employeeChildren, List<ChildrenData> allChildren}) {
+    List<SelectedChildren> finalList = [];
+    allChildren.forEach((theChild) {
+      finalList.add(SelectedChildren(
+        child: theChild,
+        selected: employeeChildren.contains(theChild),
+      ));
+    });
+    return finalList;
+  }
+
+  void updateChildren({EmployeesData employee, List<SelectedChildren> selectedChildren}) async {
+    employee.children.clear();
+    selectedChildren.forEach((selectedChild) {
+      if (selectedChild.selected) employee.children.add(selectedChild.child);
+    });
+    await employee.save();
+  }
 
   @override
   void initState() {

@@ -23,7 +23,7 @@ void main() async {
   gStore.registerLazySingleton<GlobalStore>(() => GlobalStore());
   
   runApp(MaterialApp(
-    title: 'The EFT test application',
+    title: 'Employees and their children.',
     initialRoute: RouteNames.index,
     routes: {
       RouteNames.index: (BuildContext context) => Index(),
