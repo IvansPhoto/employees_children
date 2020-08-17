@@ -7,25 +7,31 @@ import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SL {
-  List<EmployeesData> get allEmployee => Hive.box<EmployeesData>(Boxes.employeesBox).values.toList();
+//  List<EmployeesData> get allEmployee => Hive.box<EmployeesData>(Boxes.employeesBox).values.toList();
+//
+//  final _employee = BehaviorSubject<EmployeesData>();
+//  Stream get streamEmployee$ => _employee.stream;
+//  EmployeesData get currentEmployee => _employee.value;
+//  set setEmployee(EmployeesData employee) => _employee.add(employee);
+//
+//
+//  final _allEmployee = BehaviorSubject<List<EmployeesData>>.seeded(Hive.box<EmployeesData>(Boxes.employeesBox).values.toList());
+//  Stream get streamAllEmployee$ => _allEmployee.stream;
+//  List<EmployeesData> get currentListOfEmployee => _allEmployee.value;
+//  set setListEmployee(List<EmployeesData> newListOfEmployee) => _allEmployee.add(newListOfEmployee);
+//  set addEmployee(EmployeesData newEmployee) => Hive.box<EmployeesData>(Boxes.employeesBox).add(newEmployee);
 
-  final _employee = BehaviorSubject<EmployeesData>();
+  final _childrenList = BehaviorSubject<List<ChildrenData>>.seeded(Hive.box<ChildrenData>(Boxes.childrenBox).values);
+  Stream get streamChildrenList => _childrenList.stream;
+  List<ChildrenData> get currentChildrenList => _childrenList.value;
+  set setChildrenList(List<ChildrenData> newChildrenList) => _childrenList.add(newChildrenList);
+  set addChildren(ChildrenData newChild) => Hive.box<ChildrenData>(Boxes.childrenBox).add(newChild);
 
-  Stream get streamEmployee$ => _employee.stream;
-
-  EmployeesData get currentEmployee => _employee.value;
-
-  set setEmployee(EmployeesData employee) => _employee.add(employee);
-
-  final _allEmployee = BehaviorSubject<List<EmployeesData>>.seeded(Hive.box<EmployeesData>(Boxes.employeesBox).values.toList());
-
-  Stream get streamAllEmployee$ => _allEmployee.stream;
-
-  List<EmployeesData> get currentListOfEmployee => _allEmployee.value;
-
-  set setListEmployee(List<EmployeesData> newListOfEmployee) => _allEmployee.add(newListOfEmployee);
-
-  set addEmployee(EmployeesData newEmployee) => Hive.box<EmployeesData>(Boxes.employeesBox).add(newEmployee);
+  void filter(String searchingText) {
+    _childrenList.add(Hive.box<ChildrenData>(Boxes.childrenBox)
+        .values
+        .where((child) => child.name.contains(searchingText) || child.surName.contains(searchingText) || child.patronymic.contains(searchingText)));
+  }
 }
 
 String monthFromNumber(DateTime dateTime) {
