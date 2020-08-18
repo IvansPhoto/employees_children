@@ -19,7 +19,7 @@ void main() async {
   await Hive.openBox<EmployeesData>(Boxes.employeesBox);
   await Hive.openBox<ChildrenData>(Boxes.childrenBox);
 
-  gStore.registerLazySingleton<GlobalStore>(() => GlobalStore());
+  gStore.registerLazySingleton<GlobalStore>(() => GlobalStore(childrenBox: Hive.box<ChildrenData>(Boxes.childrenBox)));
 
   runApp(MaterialApp(
     title: 'Employees and their children.',

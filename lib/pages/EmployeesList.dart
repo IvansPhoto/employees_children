@@ -5,8 +5,33 @@ import 'package:employees_children/classes.dart';
 import 'package:employees_children/GlobalStore.dart';
 import 'package:employees_children/Support.dart';
 
-class EmployeesList extends StatelessWidget {
+class EmployeesList extends StatefulWidget {
+  @override
+  _EmployeesListState createState() => _EmployeesListState();
+}
+
+class _EmployeesListState extends State<EmployeesList> {
   final store = gStore.get<GlobalStore>();
+  Box<EmployeesData> employeeBox;
+  List<EmployeesData> employeeList;
+  TextEditingController searchingText;
+
+  @override
+  void initState() {
+    searchingText = TextEditingController();
+    employeeBox = Hive.box<EmployeesData>(Boxes.employeesBox);
+    employeeList = Hive.box<EmployeesData>(Boxes.employeesBox)
+        .values
+        .where((child) => child.name.contains(searchingText.text) || child.surName.contains(searchingText.text) || child.patronymic.contains(searchingText.text))
+        .toList();
+    super.initState();
+  }
+
+  void filter({String searchingText, List<EmployeesData> employeeList}) {
+    print(searchingText);
+    employeeList = employeeList.where((child) => child.name.contains(searchingText) || child.surName.contains(searchingText) || child.patronymic.contains(searchingText));
+    print(employeeList.length);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +44,14 @@ class EmployeesList extends StatelessWidget {
         ],
       ),
       body: ValueListenableBuilder(
-        valueListenable: Hive.box<EmployeesData>(Boxes.employeesBox).listenable(), //Using Hive as state management.
+        valueListenable: employeeBox.listenable(), //Using Hive as state management.
         builder: (context, Box<EmployeesData> box, _) {
           if (box.values.isEmpty) return Center(child: const Text("No employees in the list.")); //Return a text if there are no records.
           return Column(
             children: [
               Expanded(
                 child: ListView.builder(
-                  itemCount: box.values.length,
+                  itemCount: employeeList.length,
                   itemBuilder: (context, index) {
                     EmployeesData theEmployee = box.getAt(index);
                     return Card(
@@ -45,12 +70,15 @@ class EmployeesList extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 1, 65, 1),
-                //TODO: create a filtration of all records.
                 child: TextFormField(
-//                  controller: TextEditingController(),
+                  controller: searchingText,
                   maxLength: 50,
                   decoration: const InputDecoration(hintText: 'Matches in name or surname', labelText: 'Searching', hintStyle: TextStyle(fontSize: 15)),
-                  onChanged: (text) => print(text),
+                  onChanged: (text) => setState(() {
+	                  print(employeeList.length);
+	                  employeeList = employeeList.where((child) => child.name.contains(text) || child.surName.contains(text) || child.patronymic.contains(text));
+                    print(employeeList.length);
+                  }),
                 ),
               )
             ],
