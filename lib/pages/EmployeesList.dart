@@ -14,38 +14,34 @@ class _EmployeesListState extends State<EmployeesList> {
   final store = gStore.get<GlobalStore>();
   Box<EmployeesData> employeeBox;
   List<EmployeesData> employeeList;
-  TextEditingController searchingText;
 
   @override
   void initState() {
-    searchingText = TextEditingController();
     employeeBox = Hive.box<EmployeesData>(Boxes.employeesBox);
-    employeeList = Hive.box<EmployeesData>(Boxes.employeesBox)
-        .values
-        .where((child) => child.name.contains(searchingText.text) || child.surName.contains(searchingText.text) || child.patronymic.contains(searchingText.text))
-        .toList();
+    employeeList = Hive.box<EmployeesData>(Boxes.employeesBox).values.where((element) => element.surName.contains('B')).toList();
     super.initState();
   }
 
-  void filter({String searchingText, List<EmployeesData> employeeList}) {
-    print(searchingText);
-    employeeList = employeeList.where((child) => child.name.contains(searchingText) || child.surName.contains(searchingText) || child.patronymic.contains(searchingText));
-    print(employeeList.length);
+  void filter({String searchingText}) {
+    setState(() {
+      employeeList.where((employee) => employee.name.contains(searchingText) || employee.surName.contains(searchingText) || employee.patronymic.contains(searchingText));
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
+    print('rebuild');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         title: const Text('The list of employees'),
-        actions: [
-          _ButtonAddEmployee(),
-        ],
+        actions: [_ButtonAddEmployee()],
       ),
       body: ValueListenableBuilder(
         valueListenable: employeeBox.listenable(), //Using Hive as state management.
         builder: (context, Box<EmployeesData> box, _) {
+          print('rebuild Box');
           if (box.values.isEmpty) return Center(child: const Text("No employees in the list.")); //Return a text if there are no records.
           return Column(
             children: [
@@ -53,7 +49,7 @@ class _EmployeesListState extends State<EmployeesList> {
                 child: ListView.builder(
                   itemCount: employeeList.length,
                   itemBuilder: (context, index) {
-                    EmployeesData theEmployee = box.getAt(index);
+                    EmployeesData theEmployee = employeeList[index];
                     return Card(
                       elevation: 0,
                       child: ListTile(
@@ -71,14 +67,9 @@ class _EmployeesListState extends State<EmployeesList> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 1, 65, 1),
                 child: TextFormField(
-                  controller: searchingText,
                   maxLength: 50,
                   decoration: const InputDecoration(hintText: 'Matches in name or surname', labelText: 'Searching', hintStyle: TextStyle(fontSize: 15)),
-                  onChanged: (text) => setState(() {
-	                  print(employeeList.length);
-	                  employeeList = employeeList.where((child) => child.name.contains(text) || child.surName.contains(text) || child.patronymic.contains(text));
-                    print(employeeList.length);
-                  }),
+                  onChanged: (text) => filter(searchingText: text),
                 ),
               )
             ],
