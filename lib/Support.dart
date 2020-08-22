@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'package:employees_children/classes.dart';
 import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
@@ -95,5 +96,25 @@ abstract class GeneratePersons {
       patronymic: 'Hive',
       birthdate: DateTime(_randomBirthdayYear, _randomBirthdayMonth, _randomBirthdayDay)
     ));
+  }
+}
+
+
+class ButtonAddChildrenEmployee extends StatelessWidget {
+  final String snackBarText;
+  final bool genChild;
+
+  ButtonAddChildrenEmployee({this.snackBarText, this.genChild});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.get_app),
+        onPressed: () {
+          genChild ? GeneratePersons.generateChildren() : GeneratePersons.generateEmployees();
+          Scaffold.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(snackBarText)));
+        });
   }
 }

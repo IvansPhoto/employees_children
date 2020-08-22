@@ -19,7 +19,9 @@ void main() async {
   await Hive.openBox<EmployeesData>(Boxes.employeesBox);
   await Hive.openBox<ChildrenData>(Boxes.childrenBox);
 
-  gStore.registerLazySingleton<GlobalStore>(() => GlobalStore(childrenBox: Hive.box<ChildrenData>(Boxes.childrenBox)));
+  gStore.registerLazySingleton<GlobalStore>(
+    () => GlobalStore(childrenBox: Hive.box<ChildrenData>(Boxes.childrenBox), employeeBox: Hive.box<EmployeesData>(Boxes.employeesBox)),
+  );
 
   runApp(MaterialApp(
     title: 'Employees and their children.',
@@ -45,15 +47,18 @@ void main() async {
         primaryColor: Colors.red[900],
         primaryColorDark: Colors.red[700],
         primaryColorLight: Colors.red[500],
-        buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.normal, height: 15, buttonColor: Colors.red[900], ),
+        buttonTheme: ButtonThemeData(
+          textTheme: ButtonTextTheme.normal,
+          height: 15,
+          buttonColor: Colors.red[900],
+        ),
         textTheme: TextTheme(
-          bodyText1: TextStyle(fontSize: 25, color: Colors.red),
-          bodyText2: TextStyle(fontSize: 25),
-          caption: TextStyle(fontSize: 10, color: Colors.amber),
-          button: TextStyle(fontSize: 30, color: Colors.blue),
-          subtitle1: TextStyle(fontSize: 25, color: Colors.red),
-          headline3: TextStyle(fontSize: 35, decoration: TextDecoration.overline)
-        )),
+            bodyText1: TextStyle(fontSize: 25, color: Colors.red),
+            bodyText2: TextStyle(fontSize: 25),
+            caption: TextStyle(fontSize: 10, color: Colors.amber),
+            button: TextStyle(fontSize: 30, color: Colors.blue),
+            subtitle1: TextStyle(fontSize: 25, color: Colors.red),
+            headline3: TextStyle(fontSize: 35, decoration: TextDecoration.overline))),
   ));
 }
 

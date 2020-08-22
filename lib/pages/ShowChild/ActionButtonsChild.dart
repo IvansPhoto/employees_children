@@ -24,7 +24,6 @@ class ActionButtonsChild extends StatelessWidget {
           icon: Icon(Icons.delete_forever),
           label: Text('Delete'),
         )
-        //TODO: modal to confirm delete the employee
       ],
     );
 

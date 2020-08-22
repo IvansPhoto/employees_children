@@ -31,9 +31,7 @@ class ShowChild extends StatelessWidget {
               Divider(),
               Text('Birthday:'),
               Text('${child.birthdate == null ? 'Not specified' : monthFromNumber(child.birthdate)}', style: Theme.of(context).textTheme.bodyText1),
-              ActionButtonsChild(
-                child: child,
-              )
+              ActionButtonsChild(child: child)
             ],
           );
         },
